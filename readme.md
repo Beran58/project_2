@@ -4,4 +4,4 @@
 > 
 > V projektu je použit mustache, proto:
 ### Postup nasazení
-> v kořenové složce souboru vložte příkaz "composer update"
+> V kořenové složce souboru vložte příkaz "composer update"
