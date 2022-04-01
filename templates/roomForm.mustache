@@ -1,0 +1,23 @@
+<form method="post">
+    <div class="my-2">
+        <label for="name">Room name</label>
+        <input id="name" value="{{room.name}}" name="name" class="form-control" type="text"/>
+        {{#errors.name}}<div class="form-text text-warning">{{errors.name}}</div> {{/errors.name}}
+    </div>
+        <div class="my-2">
+            <label for="no">No.</label>
+            <input id="no" value="{{room.no}}" name="no" class="form-control" type="text"/>
+            {{#errors.no}}<div class="form-text text-warning">{{errors.no}}</div> {{/errors.no}}
+        </div>
+        <div class="my-2">
+            <label for="phone">Phone</label>
+            <input id="phone" value="{{room.phone}}" name="phone" class="form-control" type="text"/>
+        </div>
+        <div class="my-2">
+            {{#create}}<input type="hidden" name="action" value="create">
+        <input type="submit" value="Create" class="btn btn-primary">{{/create}}
+            {{#update}}<input type="hidden" name="action" value="update">
+                <input type="hidden" name="room_id" value="{{room.room_id}}"/>
+                <input type="submit" value="Update" class="btn btn-primary">{{/update}}
+        </div>
+</form>

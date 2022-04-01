@@ -1,0 +1,24 @@
+{{#employee}}
+<h2><a href="employeeList.php">Back to Employee List</a></h2>
+</table>
+<table class="table table-striped table-bordered">
+    <thead class="thead-dark">
+        <th colspan="2" style="text-align: center">
+            Employee card of {{surname}}
+            {{#isAdmin}}&nbsp<a href="updateEmployee.php?employeeId={{employee_id}}" class="btn btn-info">Edit</a>
+            &nbsp;<a href="deleteEmployee.php?employee_id={{employee_id}}" class="btn btn-danger">Delete</a>{{/isAdmin}}
+        </th>
+    </thead>
+    <tbody>
+        <tr><td>Surname</td><td style="text-align: center">{{surname}}</td></tr>
+        <tr><td>Name</td><td style="text-align: center">{{name}}</td></tr>
+        <tr><td>Job</td><td style="text-align: center">{{job}}</td></tr>
+        <tr><td>Wage</td><td style="text-align: center">{{wage}}</td></tr>
+        <tr><td>Room</td><td style="text-align: center">{{roomName}}</td></tr>
+        <tr><td colspan="2" style="text-align: center;font-weight: bold">Keys</td></tr>
+        {{#keys}}
+            <tr><td colspan="2" style="text-align: center"><a href="roomDetail.php?roomId={{room_id}}">{{roomName}}</a></td></tr>
+        {{/keys}}
+    </tbody>
+</table>
+{{/employee}}

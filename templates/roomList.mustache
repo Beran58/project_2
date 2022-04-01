@@ -1,0 +1,51 @@
+
+<h2><a href="index.php">Back to Main Menu</a> &nbsp; <a href="logout.php" class="btn btn-warning">Log out</a></h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name
+                <a href="{{ source}}?sortBy=name&sortHow=DESC"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z"/></svg></a>
+                <a href="{{ source}}?sortBy=name&sortHow=ASC"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"/></svg></a>
+            </th>
+            <th>No.
+                <a href="{{ source}}?sortBy=no&sortHow=DESC"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z"/></svg></a>
+                <a href="{{ source}}?sortBy=no&sortHow=ASC"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"/></svg></a>
+            </th>
+            <th>Phone
+                <a href="{{ source}}?sortBy=phone&sortHow=DESC"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z"/></svg></a>
+                <a href="{{ source}}?sortBy=phone&sortHow=ASC"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"/></svg></a>
+            </th>
+            <th colspan="2" style="text-align: center">Actions</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    {{# rooms}}
+    <tr>
+        <td><a href="{{ roomDetailName }}?roomId={{ room_id }}">{{ name }}</a></td>
+        <td>{{ no }}</td>
+        <td>{{ phone }}</td>
+        {{#admin}}
+        <td><form action="deleteRoom.php" method="post" onsubmit="return confirm('Really Delete? \n\n This action cannot be undone!')">
+            <input type="hidden" name="roomId" value="{{ room_id }}"/>
+            <input type="submit" value="Delete" class="btn btn-danger">
+        </form></td>
+        <td><a href="updateRoom.php?roomId={{ room_id }}" class="btn btn-info">Edit</a></td>
+        {{/admin}}
+        {{^admin}}
+            <td><form action="" method="post" onsubmit="return confirm('Really Delete? \n\n This action cannot be undone!')">
+                <input type="hidden" name="roomId" value="{{ room_id }}"/>
+                <input type="submit" value="Delete" class="btn btn-danger" disabled>
+            </form></td>
+            <td><a href="" class="btn btn-info disabled" aria-disabled>Edit</a></td>
+        {{/admin}}
+    </tr>
+    {{/rooms}}
+    </tbody>
+</table>
+{{#admin}}
+    <a class="btn btn-primary" href="../rooms/createRoom.php">Create new room</a>
+{{/admin}}
+{{^admin}}
+    <a class="btn btn-primary disabled" href="" aria-disabled>Create new room</a>
+{{/admin}}

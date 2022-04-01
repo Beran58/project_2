@@ -1,0 +1,17 @@
+{{#room}}
+    <h2><a href="roomList.php">Back to Room List</a></h2>
+    <table class="table table-striped table-bordered">
+        <thead class="thead-dark" style="text-align: center">
+            <th colspan="2">Card of room {{name}}</th>
+        </thead>
+        <tbody>
+            <tr><td>Name</td><td>{{name}}</td></tr>
+            <tr><td>No</td><td>{{no}}</td></tr>
+            <tr><td>Phone</td><td>{{phone}}</td></tr>
+            <tr><td colspan="2" style="text-align: center;font-weight: bold">People</td></tr>
+            {{#people}}
+                <tr><td colspan="2" style="text-align: center " ><a href="employeeDetail.php?employeeId={{employee_id}}">{{employeeName}}</a></td></tr>
+            {{/people}}
+        </tbody>
+    </table>
+{{/room}}
