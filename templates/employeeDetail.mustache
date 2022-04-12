@@ -4,9 +4,11 @@
 <table class="table table-striped table-bordered">
     <thead class="thead-dark">
         <th colspan="2" style="text-align: center">
-            Employee card of {{surname}}
-            {{#isAdmin}}&nbsp<a href="updateEmployee.php?employeeId={{employee_id}}" class="btn btn-info">Edit</a>
-            &nbsp;<a href="deleteEmployee.php?employee_id={{employee_id}}" class="btn btn-danger">Delete</a>{{/isAdmin}}
+            Employee card of {{surname}}<br>
+            {{#isAdmin}}&nbsp<a href="updateEmployee.php?employeeId={{employee_id}}" class="btn btn-info">Edit</a><form action="deleteEmployee.php" method="post" onsubmit="return confirm('Really Delete? \n\n This action cannot be undone!')">
+                <input type="hidden" name="employeeId" value="{{ employee_id }}"/>
+                <input type="submit" value="Delete" class="btn btn-danger">
+            </form>{{/isAdmin}}
         </th>
     </thead>
     <tbody>

@@ -1,3 +1,4 @@
+<h2><a href="employeeList.php">Return to Employee List</a></h2>
 <form method="post" id="form">
     <div class="my-2">
         <label for="name">Name</label>
@@ -39,7 +40,7 @@
         <select name="room" id="room" form="form" class="form-select form-select-lg my-2">
             <option selected value="{{employee.room}}">{{employee.roomName}}</option>
         {{#rooms}}
-            <option value={{room_id}}>{{name}}</option>
+            <option value={{room_id}}>{{roomName}}</option>
         {{/rooms}}
         </select>
         {{#errors.room}}<div class="form-text text-warning">{{errors.room}}</div> {{/errors.room}}
