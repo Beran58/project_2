@@ -1,10 +1,10 @@
 <?php
 class KeyModel
 {
-    public int $employee_id;
-    public int $room_id;
-    public string $employeeName;
-    public string $roomName;
+    public ?int $employee_id;
+    public ?int $room_id;
+    public ?string $employeeName;
+    public ?string $roomName;
 
     public ?bool $checked;
 
@@ -73,6 +73,27 @@ class KeyModel
         }
         else return NULL;
     }
+
+    public static function getOnlyRoom($room_id) : self
+    {
+        $pdo = DB::getInstance();
+        $key = new KeyModel();
+        $key->room_id = $room_id;
+
+        $sql = "SELECT `name` FROM room WHERE `room_id`=:room_id";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(":room_id",$key->room_id);
+        $isOkR = $stmt->execute();
+        $roomRecord = $stmt->fetch();
+        $key->roomName = $roomRecord->name;
+
+        if ($isOkR)
+        {
+            return $key;
+        }
+        else return "Something went wrong";
+    }
+
 
     public function setChecked($set)
     {

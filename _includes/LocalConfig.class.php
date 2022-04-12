@@ -1,9 +1,10 @@
 <?php
+//rename to LocalConfig.class.php
 class LocalConfig extends Config {
-    public const DBHOST = ''; //Your DB host here.
-    public const DATABASE = ''; //Your DB name here.
-    public const DBUSER = ''; //Your DB username here.
-    public const DBPASS = ''; //Your DB password here.
+    public const DBHOST = '';
+    public const DATABASE = '';
+    public const DBUSER = '';
+    public const DBPASS = '';
 
-    public const DEBUG = false;
+    public const DEBUG = true;
 }

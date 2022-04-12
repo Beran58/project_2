@@ -9,12 +9,12 @@ class EmployeeModel
     public int $wage;
     public ?int $room;
     public ?string $roomName;
-    public array $keys = [];
+    public ?array $keys = [];
     public ?string $login = "";
     public ?string $password = "";
     public ?bool $admin;
 
-    private array $validationErrors = [];
+    public array $validationErrors = [];
 
     public function __construct()
     {
@@ -62,20 +62,22 @@ class EmployeeModel
         $stmt->execute();
         $this->employee_id = $stmt->fetch()->employee_id;
 
-
+        $insertKeys = false;
+    if($this->keys !== NULL) {
         $sql = "DELETE FROM `key` WHERE `employee`=:employee_id";
         $stmt = DB::connect()->prepare($sql);
-        $stmt->bindParam(":employee_id",$this->employee_id);
+        $stmt->bindParam(":employee_id", $this->employee_id);
         $stmt->execute();
 
-        foreach ($this->keys as $row)
-        {
+        foreach ($this->keys as $row) {
             $sql = "INSERT INTO `key`(employee,room) VALUES (:employee , :room)";
             $stmt = DB::connect()->prepare($sql);
-            $stmt->bindParam(":employee",$this->employee_id);
-            $stmt->bindParam(":room",$row);
-            $insertKeys=$stmt->execute();
+            $stmt->bindParam(":employee", $this->employee_id);
+            $stmt->bindParam(":room", $row);
+            $insertKeys = $stmt->execute();
         }
+    }
+    else $insertKeys = true;
         if($insertEmp && $insertKeys)
         {
             return true;
@@ -150,20 +152,6 @@ class EmployeeModel
             array_push($keyRecord,KeyModel::getByRoom($row->room));
         }
 
-       /* $stmt = DB::connect()->prepare("SELECT `name`,`room_id` FROM `room` WHERE `room_id`=:room_id");
-        foreach ($keyRecord as $row)
-        {
-            $stmt->bindParam(":room_id",$row);
-            $stmt->execute();
-            $name = $stmt->fetch()->name;
-            $keyRecord[$row] = $name;
-            array_push($keyNameRecord,$name);
-        }*/
-
-       /* if(!$record || !$roomRecord)
-        {
-            return null;
-        }*/
         $model = new self();
         $model->employee_id = $record->employee_id;
         $model->name = $record->name;
@@ -175,38 +163,18 @@ class EmployeeModel
         $model->keys = $keyRecord;
         $model->login = $record->login;
         $model->password = $record->password;
-
+        $model->admin = $record->admin;
 
         return $model;
     }
 
-    public function rewriteById(EmployeeModel $employee)
-    {
-        $this->employee_id = $employee->employee_id;
-        $this->name = $employee->name;
-        $this->surname = $employee->surname;
-        $this->job = $employee->job;
-        $this->wage = $employee->wage;
-        if($employee->room === NULL)
-        {
-            $this->room = NULL;
-        }
-        else $this->room = $employee->room;
-        $this->roomName = $employee->roomName;
-        $this->login = $employee->login;
-        $this->keys = $employee->keys;
-        $this->password = $employee->password;
-    }
-
     public static function deleteById(int $employee_id) : bool
     {
-        $deleteKeys = false;
         $sql = "DELETE FROM `key` WHERE `employee`=:employee_id";
         $stmt = DB::connect()->prepare($sql);
         $stmt->bindParam(":employee_id",$employee_id);
         $deleteKeys = $stmt->execute();
 
-        $deleteEmp = false;
         $sql = "DELETE FROM employee WHERE employee_id=:employee_id";
         $stmt = DB::Connect()->prepare($sql);
         $stmt->bindParam(':employee_id', $employee_id);
@@ -224,7 +192,6 @@ class EmployeeModel
 
         $employee = new EmployeeModel();
         $employee->employee_id = filter_input(INPUT_POST,"employee_id",FILTER_VALIDATE_INT);
-        /*$employee = $employee->getById($employee->employee_id);*/
         $employee->name = filter_input(INPUT_POST,"name");
         $employee->surname = filter_input(INPUT_POST,"surname");
         $employee->job = filter_input(INPUT_POST,"job");
@@ -272,7 +239,13 @@ class EmployeeModel
 
         if (!$this->wage){
             $isOk = false;
-            $errors["wage"] = "Employee wage cannot be empty";
+            $errors["wage"] = "Employee wage cannot be empty. ";
+        }
+
+        if($this->wage < 0)
+        {
+            $isOk = false;
+            $errors["wage"] = "Employee wage cannot be negative.";
         }
 
         if (!$this->room){

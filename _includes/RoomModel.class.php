@@ -45,7 +45,7 @@ class RoomModel
         return $stmt->execute();
     }
 
-    public static function getAll($orderBy = "name",$orderDir =  "ASC") : PDOStatement
+    public static function getAll($orderBy = "name",$orderDir =  "ASC") : POStatement
     {
         $stmt = DB::connect()->prepare("Select * from `room` ORDER BY `{$orderBy} {$orderDir}`");
         $stmt->execute();
