@@ -68,25 +68,22 @@ final class Page extends BaseDBPage{
     protected function body(): string {
         if($this->admin) {
             if ($this->state === self::STATE_FORM_REQUESTED) {
-                $employeeId = filter_input(INPUT_GET, "employeeId", FILTER_VALIDATE_INT);
-                if ($employeeId) {
-                    $this->employeeModel = EmployeeModel::getById($employeeId);
-                    if (!$this->employeeModel) {
-                        throw new RequestException(404);
-                    }
-                } else throw new RequestException(400);
-
                 $keys = [];
+                $rooms = [];
 
                 $sql = "SELECT * FROM `room`";
                 $stmt = DB::connect()->query($sql);
                 $stmt->execute();
+                foreach ($stmt as $row)
+                {
+                    array_push($rooms,KeyModel::getOnlyRoom($row->room_id));
+                }
 
                 $stmt2 = DB::connect()->query($sql);
                 $stmt2->execute();
 
                 foreach ($stmt2 as $row) {
-                    $key = KeyModel::getByRoom($row->room_id);
+                    $key = KeyModel::getOnlyRoom($row->room_id);
                     foreach ($this->employeeModel->keys as $item) {
                         if (strval($row->room_id) === $item->room_id) {
                             $key->checked = true;
@@ -96,8 +93,8 @@ final class Page extends BaseDBPage{
                 }
 
                 if ($this->logged) {
-                    return $this->m->render("employeeForm", ["employee" => $this->employeeModel, "rooms" => $stmt, "keys" => $keys,
-                        "errors" => $this->employeeModel->getValidationErrors(),
+                    return $this->m->render("employeeForm", ["employee" => $this->employeeModel, "rooms" => $rooms, "keys" => $keys,
+                        "errors" => $this->employeeModel->validationErrors,
                         "update" => true
                     ]);
                 } else return $this->m->render("login");

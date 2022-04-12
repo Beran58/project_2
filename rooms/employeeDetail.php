@@ -11,8 +11,8 @@ final class Page extends BaseDBPage
     protected function body() : string
     {
         if($_SESSION["logged"]) {
-            $employee = new EmployeeModel();
-            $employee->rewriteById($employee->getById($employee->employee_id));
+            $emp_id = filter_input(INPUT_GET,"employeeId",FILTER_VALIDATE_INT);
+            $employee = EmployeeModel::getById($emp_id);
             return $this->m->render("employeeDetail", ["employee" => $employee,"isAdmin"=>$_SESSION["admin"]]);
         }
         else return $this->m->render("login");

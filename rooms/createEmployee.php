@@ -61,19 +61,27 @@ final class Page extends BaseDBPage{
     protected function body(): string {
         if ($this->admin) {
             $keys = [];
+            $rooms = [];
 
-            $sql = "SELECT * FROM `room`";
+            $sql = "SELECT room_id FROM `room`";
             $stmt = DB::connect()->query($sql);
             $stmt->execute();
             foreach ($stmt as $row)
+            {
+                array_push($rooms,KeyModel::getOnlyRoom($row->room_id));
+            }
 
-                $stmt2 = DB::connect()->query($sql);
+            $stmt2 = DB::connect()->query($sql);
             $stmt2->execute();
+            foreach ($stmt2 as $row)
+            {
+                array_push($keys,KeyModel::getOnlyRoom($row->room_id));
+            }
 
 
             if ($this->state === self::STATE_FORM_REQUESTED) {
                 if ($this->logged) {
-                    return $this->m->render("employeeForm", ["employee" => $this->employeeModel, "rooms" => $stmt, "keys" => $stmt2, "errors" => $this->employeeModel->getValidationErrors(), "create" => true]);
+                    return $this->m->render("employeeForm", ["employee" => $this->employeeModel, "rooms" => $rooms, "keys" => $keys, "errors" => $this->employeeModel->getValidationErrors(), "create" => true]);
                 } else return $this->m->render("login");
             } elseif ($this->state === self::STATE_REPORT_RESULT) {
                 if ($this->result === self::RESULT_SUCCESS) {
